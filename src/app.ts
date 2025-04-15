@@ -7,21 +7,10 @@ import userRoutes from "./routes/userRoutes";
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://budget-tracker-three-chi.vercel.app",
-];
-
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
+    origin: true, // this allows all origins
+    credentials: true, // this allows cookies, authorization headers, etc.
   })
 );
 
