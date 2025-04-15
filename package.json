@@ -4,8 +4,6 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc",
-    "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
