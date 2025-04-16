@@ -3,6 +3,7 @@ import cors from "cors";
 import expenseRoutes from "./routes/expenseRoutes";
 import express from "express";
 import notificationRoutes from "./routes/notificationRoutes";
+import path from "path";
 import userRoutes from "./routes/userRoutes";
 
 const app = express();

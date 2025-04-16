@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { Notification } from "../models/Notification";
 import User from "../models/User";
+import cloudinary from "../config/cloudinary";
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -89,6 +90,12 @@ export const updateUser = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    // Check if the user is an admin and trying to edit the email
+    if (req?.user?.role === "admin" && req.body.email) {
+      res.status(400).json({ error: "Admin cannot edit email." });
+      return;
+    }
+
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
@@ -112,28 +119,39 @@ export const updateUser = async (
 
 export const uploadProfilePic = async (
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
 ): Promise<void> => {
   try {
     const userId = req.user?.id;
-    const file = req.body.file;
+    const file = req.file as Express.Multer.File;
 
     if (!file) {
       res.status(400).json({ message: "No file uploaded" });
       return;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { profilePic: file.filename },
-      { new: true }
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "profile_pictures" },
+      async (error, result) => {
+        if (error || !result) {
+          res.status(500).json({ error: error?.message || "Upload failed" });
+          return;
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { profilePic: result.secure_url },
+          { new: true }
+        );
+
+        res.status(200).json({
+          message: "Profile picture updated",
+          profilePic: updatedUser?.profilePic,
+        });
+      }
     );
 
-    res.status(200).json({
-      message: "Profile picture updated",
-      profilePic: updatedUser?.profilePic,
-    });
+    stream.end(file.buffer);
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

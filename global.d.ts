@@ -6,7 +6,7 @@ declare namespace Express {
     user?: {
       id: string;
       role: string;
-      // Add more user fields if needed
+      email: string;
     };
   }
 }

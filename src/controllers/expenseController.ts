@@ -66,6 +66,8 @@ export const getUserExpenses = async (req: Request, res: Response) => {
     if (sortDate) {
       const parsedDate = new Date(sortDate);
       if (!isNaN(parsedDate.getTime())) {
+        // Subtract 1 day (24 hours) from the parsed date
+        parsedDate.setDate(parsedDate.getDate() - 1);
         query.date = { $gte: parsedDate };
       }
     }
