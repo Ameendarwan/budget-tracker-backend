@@ -10,8 +10,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: true, // this allows all origins
-    credentials: true, // this allows cookies, authorization headers, etc.
+    origin: "*",
+    methods: "*",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
