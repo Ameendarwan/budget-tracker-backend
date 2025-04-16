@@ -10,9 +10,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*", // Allow all origins, or specify a specific domain (e.g., 'https://yourfrontend.com')
-    methods: ["GET", "POST", "PUT", "DELETE"], // Adjust methods if needed
-    allowedHeaders: ["Content-Type", "Authorization"], // Adjust headers if needed
+    origin: "*",
+    methods: "*",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 
